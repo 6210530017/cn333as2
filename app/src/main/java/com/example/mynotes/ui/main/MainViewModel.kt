@@ -30,12 +30,12 @@ class MainViewModel(private val sharedPreferences: SharedPreferences) : ViewMode
         onListAdded.invoke()
     }
 
-    fun updateList(list: TaskList) {
-    sharedPreferences.edit().putStringSet(list.name, list.tasks.toHashSet()).apply()
-        refreshLists()
-    }
-
-    fun refreshLists() {
-        lists.addAll(retrieveLists())
-    }
+//    fun updateList(list: TaskList) {
+//    sharedPreferences.edit().putStringSet(list.name, list.tasks.toHashSet()).apply()
+//        refreshLists()
+//    }
+//
+//    fun refreshLists() {
+//        lists.addAll(retrieveLists())
+//    }
 }

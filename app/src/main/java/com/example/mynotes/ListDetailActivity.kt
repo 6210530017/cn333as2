@@ -9,24 +9,31 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.example.mynotes.databinding.ListDetailActivityBinding
+import com.example.mynotes.models.TaskList
 import com.example.mynotes.ui.detail.ListDetailFragment
 import com.example.mynotes.ui.detail.ListDetailViewModel
 
 class ListDetailActivity : AppCompatActivity() {
-    private lateinit var binding: ListDetailActivityBinding
-    private lateinit var viewModel: ListDetailViewModel
+//    private lateinit var binding: ListDetailActivityBinding
+//    private lateinit var viewModel: ListDetailViewModel
+
+    lateinit var  list : TaskList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ListDetailViewModel::class.java)
-        binding = ListDetailActivityBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        binding.addTaskButton.setOnClickListener {
-            popupCreateTask()
-        }
+//        viewModel = ViewModelProvider(this).get(ListDetailViewModel::class.java)
+//        binding = ListDetailActivityBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
+//        binding.addTaskButton.setOnClickListener {
+//            popupCreateTask()
+//        }
 
-        viewModel.list = intent.getParcelableExtra(MainActivity.INTENT_LIST_KEY)!!
-        title = viewModel.list.name
+//        viewModel.list = intent.getParcelableExtra(MainActivity.INTENT_LIST_KEY)!!
+//        title = viewModel.list.name
+
+        setContentView(R.layout.list_detail_activity)
+        list = intent.getParcelableExtra(MainActivity.INTENT_LIST_KEY)!!
+        title = list.name
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -35,23 +42,23 @@ class ListDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun popupCreateTask() {
-        val editText = EditText(this)
-        editText.inputType = InputType.TYPE_CLASS_TEXT
-
-        AlertDialog.Builder(this).setTitle(R.string.task_name).setView(editText).setPositiveButton(R.string.add_task) { dialog, _ ->
-            val task = editText.text.toString()
-            viewModel.addTask(task)
-            dialog.dismiss()
-        }.create().show()
-    }
-
-    override fun onBackPressed() {
-        val bundle = Bundle()
-        bundle.putParcelable(MainActivity.INTENT_LIST_KEY, viewModel.list)
-        val intent = Intent()
-        intent.putExtras(bundle)
-        setResult(Activity.RESULT_OK, intent)
-        super.onBackPressed()
-    }
+//    private fun popupCreateTask() {
+//        val editText = EditText(this)
+//        editText.inputType = InputType.TYPE_CLASS_TEXT
+//
+//        AlertDialog.Builder(this).setTitle(R.string.task_name).setView(editText).setPositiveButton(R.string.add_task) { dialog, _ ->
+//            val task = editText.text.toString()
+//            viewModel.addTask(task)
+//            dialog.dismiss()
+//        }.create().show()
+//    }
+//
+//    override fun onBackPressed() {
+//        val bundle = Bundle()
+//        bundle.putParcelable(MainActivity.INTENT_LIST_KEY, viewModel.list)
+//        val intent = Intent()
+//        intent.putExtras(bundle)
+//        setResult(Activity.RESULT_OK, intent)
+//        super.onBackPressed()
+//    }
 }

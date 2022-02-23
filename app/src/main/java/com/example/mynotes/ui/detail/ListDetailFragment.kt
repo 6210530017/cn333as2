@@ -30,13 +30,13 @@ class ListDetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(ListDetailViewModel::class.java)
-        val adapter = ListItemRecyclerViewAdapter(viewModel.list)
-        binding.itemsRecyclerview.adapter = adapter
-        binding.itemsRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-
-        viewModel.onTaskAdded = {
-            adapter.notifyDataSetChanged()
-        }
+//        val adapter = ListItemRecyclerViewAdapter(viewModel.list)
+//        binding.itemsRecyclerview.adapter = adapter
+//        binding.itemsRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+//
+//        viewModel.onTaskAdded = {
+//            adapter.notifyDataSetChanged()
+//        }
     }
 
 }
