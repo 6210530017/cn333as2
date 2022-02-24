@@ -1,12 +1,18 @@
 package com.example.mynotes.ui.main
 
+import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.mynotes.models.TaskList
+import java.lang.ClassCastException
 
-class MainViewModel(private val sharedPreferences: SharedPreferences) : ViewModel() {
-
+class MainViewModel(val sharedPreferences: SharedPreferences) : ViewModel() {
+    lateinit var note: TaskList
     lateinit var onListAdded: (() -> Unit)
+    lateinit var removeNote: () -> Unit
+    var decreaseOne: Int = -1
 
     val lists: MutableList<TaskList> by lazy {
         retrieveLists()
@@ -14,28 +20,62 @@ class MainViewModel(private val sharedPreferences: SharedPreferences) : ViewMode
 
     private fun retrieveLists(): MutableList<TaskList> {
         val sharedPreferencesContents = sharedPreferences.all
-        val taskLists = ArrayList<TaskList>()
+        val note = ArrayList<TaskList>()
 
-        for (tasklist in sharedPreferencesContents) {
-            val itemsHashSet = ArrayList(tasklist.value as HashSet<String>)
-            val list = TaskList(tasklist.key, itemsHashSet)
-            taskLists.add(list)
+        for (noteList in sharedPreferencesContents) {
+            try {
+                val itemNote = TaskList(noteList.key,noteList.value as String)
+                note.add(itemNote)
+            } catch (e: ClassCastException){
+                Log.d(TAG,"ClassCast")
+            }
         }
-        return taskLists
+        return note
     }
 
-    fun saveList(list: TaskList) {
-        sharedPreferences.edit().putStringSet(list.name, list.tasks.toHashSet()).apply()
-        lists.add(list)
+    fun saveList(note: TaskList) {
+        val editor = sharedPreferences.edit()
+        val text: String = note.note
+        editor.putString(note.name, text)
+        editor.apply()
+        Log.d(ContentValues.TAG, note.note)
+    }
+
+    fun updateList(note: TaskList) {
+        val editor = sharedPreferences.edit()
+        val text: String = note.note
+        editor.putString(note.name, text)
+        editor.apply()
+        Log.d(ContentValues.TAG, note.note)
+        refreshLists()
+    }
+
+    fun createList(note: TaskList) {
+        val editor = sharedPreferences.edit()
+        val text: String = note.note
+        editor.putString(note.name, text)
+        editor.apply()
+        lists.add(note)
         onListAdded.invoke()
     }
 
-//    fun updateList(list: TaskList) {
-//    sharedPreferences.edit().putStringSet(list.name, list.tasks.toHashSet()).apply()
-//        refreshLists()
-//    }
-//
-//    fun refreshLists() {
-//        lists.addAll(retrieveLists())
-//    }
+    fun refreshLists() {
+        lists.clear()
+        lists.addAll(retrieveLists())
+    }
+
+    fun removeList(note: TaskList) {
+        val index = lists.indexOf(note)
+        decreaseOne = index
+        lists.remove(note)
+        removeNote.invoke()
+
+        val editor = sharedPreferences.edit()
+        editor.remove(note.name)
+        editor.apply()
+    }
+
+    fun find(key: String):Boolean {
+        return sharedPreferences.contains(key)
+    }
 }

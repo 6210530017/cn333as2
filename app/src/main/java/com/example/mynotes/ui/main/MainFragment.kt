@@ -12,15 +12,19 @@ import com.example.mynotes.R
 import com.example.mynotes.databinding.MainFragmentBinding
 import com.example.mynotes.models.TaskList
 
-class MainFragment(val clickListener: MainFragmentInteractiionListener) : Fragment(), ListSelectionRecyclerViewAdapter.ListSelectionRecyclerViewClickListener {
+class MainFragment() : Fragment(), ListSelectionRecyclerViewAdapter.ListSelectionRecyclerViewClickListener {
     private lateinit var binding: MainFragmentBinding
 
     companion object {
-        fun newInstance(clickListener: MainFragmentInteractiionListener) = MainFragment(clickListener)
+        fun newInstance() = MainFragment()
     }
 
-    interface MainFragmentInteractiionListener {
-        fun listItemTapped(list:TaskList)
+    var clickListener: MainFragmentInteractionListener? = null
+    var holdClickListener: MainFragmentInteractionListener? = null
+
+    interface MainFragmentInteractionListener {
+        fun listItemTapped(note: TaskList)
+        fun listItemHold(note: TaskList)
     }
 
     private lateinit var viewModel: MainViewModel
@@ -41,15 +45,23 @@ class MainFragment(val clickListener: MainFragmentInteractiionListener) : Fragme
         viewModel = ViewModelProvider(requireActivity(),
             MainViewModelFactory(PreferenceManager.getDefaultSharedPreferences(requireActivity()))).get(MainViewModel::class.java)
 
-        val recyclerViewAdapter = ListSelectionRecyclerViewAdapter(viewModel.lists, this)
+        val recyclerViewAdapter = ListSelectionRecyclerViewAdapter(viewModel.lists, this,this)
         binding.listRecyclerview.adapter = recyclerViewAdapter
         viewModel.onListAdded = {
-            recyclerViewAdapter.listUpdated()
+            recyclerViewAdapter.listsUpdated()
+        }
+        viewModel.removeNote ={
+            recyclerViewAdapter.listsRemove(viewModel.decreaseOne)
+
         }
     }
 
-    override fun listItemClicked(list: TaskList) {
-        clickListener.listItemTapped(list)
+    override fun listItemClicked(note: TaskList) {
+        clickListener?.listItemTapped(note)
+    }
+
+    override fun listItemHold(note: TaskList) {
+        holdClickListener?.listItemHold(note)
     }
 
 }
