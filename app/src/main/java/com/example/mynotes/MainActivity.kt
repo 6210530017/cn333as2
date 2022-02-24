@@ -52,7 +52,7 @@ class  MainActivity : AppCompatActivity(), MainFragment.MainFragmentInteractionL
         }
     }
     private fun popUpCreateList() {
-        val dialogTitle = getString(R.string.enterNameOfList)
+        val dialogTitle = getString(R.string.enterNameOfNote)
         val positiveButTitle = getString(R.string.createList)
 
         val builder = AlertDialog.Builder(this)
