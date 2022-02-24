@@ -10,4 +10,4 @@
 4. สามารถคลิกชื่อ Note ค้างไว้เพื่อทำการลบ Note นั้น
 5. รองรับการเปิด Application ทั้งในมือถือและแท็บเล็ต   
 
-[DEMO Comming soon](https://github.com/6210530017/cn333as2)
+[DEMO](https://youtu.be/WjedAQa2fJc)
